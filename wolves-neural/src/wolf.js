@@ -6,6 +6,7 @@ class Wolf extends Network {
 	constructor(name = 'Wolf', hunger = 1, scale = 1) {
 		super();
 		
+		this.name = name;
 		this.starvation = hunger;
 		this.scale = scale;
 	}
@@ -34,6 +35,14 @@ class Wolf extends Network {
 				reject();
 			}
 		});
+	}
+
+	increaseSatrvation() {
+		this.starvation += 0.1;
+	}
+
+	resetStarvation() {
+		this.starvation = 0;
 	}
 }
 
@@ -399,7 +408,7 @@ breedyEater
 				breedyEater.scale,
 				breedyEater.starvation
 			]));
-		return new Victim('rubbit', .1, .3, .05, .9);
+		return new Victim('rabbit', .1, .3, .05, .9);
 	})
 	.then(victim => {
 		console.log(breedyEater.activate([

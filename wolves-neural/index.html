@@ -7,5 +7,37 @@
 </head>
 <body>
 	<script src="src/wolf.js"></script>
+	Add an animal
+	<input type="text" id="animal-type"><br>
+	carnivores <input type="range" id="carnivores" min="0" max="1" step="0.01" value="0.5"> <br>
+	scale <input type="range" id="scale" min="0" max="1" step="0.01" value="0.5"> <br>
+	toxity <input type="range" id="toxity" min="0" max="1" step="0.01" value="0.5"> <br>
+	predisposition <input type="range" id="predisposition" min="0" max="1" step="0.01" value="0.5"><br>
+	<button onclick="feedWolf()">Feed!</button>
+	<script>
+		function feedWolf() {
+			const type = document.getElementById("animal-type").value;
+			if (!type) return;
+			const carnivores = document.getElementById("carnivores").value;
+			const scale = document.getElementById("scale").value;
+			const toxity = document.getElementById("toxity").value;
+			const predisposition = document.getElementById("predisposition").value;
+			var newVictim = new Victim(type, carnivores, scale, toxity, predisposition);
+			const decision = breedyEater.activate([
+				newVictim.carnivores,
+				newVictim.scale,
+				newVictim.toxity,
+				newVictim.predisposition,
+				breedyEater.scale,
+				breedyEater.starvation
+			]);
+			console.log(decision);
+			if (Math.round(decision[0])) {
+				console.log(breedyEater.name + ' would eat ' + newVictim.animal);
+			} else {
+				console.log(breedyEater.name + ' would NOT eat ' + newVictim.animal);
+			}
+		}
+	</script>
 </body>
 </html>
