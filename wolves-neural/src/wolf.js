@@ -47,11 +47,11 @@ class Wolf extends Network {
 }
 
 class Victim {
-	constructor(animal = 'rabbit', carnivores = 1, scale = 1, toxity = 1, predisposition = 1) {
+	constructor(animal = 'rabbit', carnivores = 1, scale = 1, toxicity = 1, predisposition = 1) {
 		this.animal = animal;
 		this.carnivores = carnivores;
 		this.scale= scale;
-		this.toxity = toxity;
+		this.toxicity = toxicity;
 		this.predisposition = predisposition;
 	}
 }
@@ -330,69 +330,6 @@ const trainingSet = [
 	
 ];
 
-/*(2) ["1", "0"]
-VM43:1 (2) ["1", "1"]
-VM43:1 (3) ["1", "0", "0"]
-VM43:1 (3) ["1", "0", "1"]
-VM43:1 (3) ["1", "1", "0"]
-VM43:1 (3) ["1", "1", "1"]
-VM43:1 (4) ["1", "0", "0", "0"]
-VM43:1 (4) ["1", "0", "0", "1"]
-VM43:1 (4) ["1", "0", "1", "0"]
-VM43:1 (4) ["1", "0", "1", "1"]
-VM43:1 (4) ["1", "1", "0", "0"]
-VM43:1 (4) ["1", "1", "0", "1"]
-VM43:1 (4) ["1", "1", "1", "0"]
-VM43:1 (4) ["1", "1", "1", "1"]
-VM43:1 (5) ["1", "0", "0", "0", "0"]
-VM43:1 (5) ["1", "0", "0", "0", "1"]
-VM43:1 (5) ["1", "0", "0", "1", "0"]
-VM43:1 (5) ["1", "0", "0", "1", "1"]
-VM43:1 (5) ["1", "0", "1", "0", "0"]
-VM43:1 (5) ["1", "0", "1", "0", "1"]
-VM43:1 (5) ["1", "0", "1", "1", "0"]
-VM43:1 (5) ["1", "0", "1", "1", "1"]
-VM43:1 (5) ["1", "1", "0", "0", "0"]
-VM43:1 (5) ["1", "1", "0", "0", "1"]
-VM43:1 (5) ["1", "1", "0", "1", "0"]
-VM43:1 (5) ["1", "1", "0", "1", "1"]
-VM43:1 (5) ["1", "1", "1", "0", "0"]
-VM43:1 (5) ["1", "1", "1", "0", "1"]
-VM43:1 (5) ["1", "1", "1", "1", "0"]
-VM43:1 (5) ["1", "1", "1", "1", "1"]
-VM43:1 (6) ["1", "0", "0", "0", "0", "0"]
-VM43:1 (6) ["1", "0", "0", "0", "0", "1"]
-VM43:1 (6) ["1", "0", "0", "0", "1", "0"]
-VM43:1 (6) ["1", "0", "0", "0", "1", "1"]
-VM43:1 (6) ["1", "0", "0", "1", "0", "0"]
-VM43:1 (6) ["1", "0", "0", "1", "0", "1"]
-VM43:1 (6) ["1", "0", "0", "1", "1", "0"]
-VM43:1 (6) ["1", "0", "0", "1", "1", "1"]
-VM43:1 (6) ["1", "0", "1", "0", "0", "0"]
-VM43:1 (6) ["1", "0", "1", "0", "0", "1"]
-VM43:1 (6) ["1", "0", "1", "0", "1", "0"]
-VM43:1 (6) ["1", "0", "1", "0", "1", "1"]
-VM43:1 (6) ["1", "0", "1", "1", "0", "0"]
-VM43:1 (6) ["1", "0", "1", "1", "0", "1"]
-VM43:1 (6) ["1", "0", "1", "1", "1", "0"]
-VM43:1 (6) ["1", "0", "1", "1", "1", "1"]
-VM43:1 (6) ["1", "1", "0", "0", "0", "0"]
-VM43:1 (6) ["1", "1", "0", "0", "0", "1"]
-VM43:1 (6) ["1", "1", "0", "0", "1", "0"]
-VM43:1 (6) ["1", "1", "0", "0", "1", "1"]
-VM43:1 (6) ["1", "1", "0", "1", "0", "0"]
-VM43:1 (6) ["1", "1", "0", "1", "0", "1"]
-VM43:1 (6) ["1", "1", "0", "1", "1", "0"]
-VM43:1 (6) ["1", "1", "0", "1", "1", "1"]
-VM43:1 (6) ["1", "1", "1", "0", "0", "0"]
-VM43:1 (6) ["1", "1", "1", "0", "0", "1"]
-VM43:1 (6) ["1", "1", "1", "0", "1", "0"]
-VM43:1 (6) ["1", "1", "1", "0", "1", "1"]
-VM43:1 (6) ["1", "1", "1", "1", "0", "0"]
-VM43:1 (6) ["1", "1", "1", "1", "0", "1"]
-VM43:1 (6) ["1", "1", "1", "1", "1", "0"]
-VM43:1 (6) ["1", "1", "1", "1", "1", "1"]*/
-
 breedyEater
 	.evolve(foodTrainer, trainingSet, options)
 	.then(_ => {
@@ -400,25 +337,35 @@ breedyEater
 		return new Victim('lizard', .5, .2, .8, .1);
 	})
 	.then(victim => {
-		console.log(breedyEater.activate([
-				victim.carnivores,
-				victim.scale,
-				victim.toxity,
-				victim.predisposition,
-				breedyEater.scale,
-				breedyEater.starvation
-			]));
+		const decision = breedyEater.activate([
+			victim.carnivores,
+			victim.scale,
+			victim.toxicity,
+			victim.predisposition,
+			breedyEater.scale,
+			breedyEater.starvation
+		]);
+		if (Math.round(decision[0])) {
+			alert(breedyEater.name + ' would eat ' + victim.animal);
+		} else {
+			alert(breedyEater.name + ' would NOT eat ' + victim.animal);
+		}
 		return new Victim('rabbit', .1, .3, .05, .9);
 	})
 	.then(victim => {
-		console.log(breedyEater.activate([
-				victim.carnivores,
-				victim.scale,
-				victim.toxity,
-				victim.predisposition,
-				breedyEater.scale,
-				breedyEater.starvation
-			]));
+		const decision = breedyEater.activate([
+			victim.carnivores,
+			victim.scale,
+			victim.toxicity,
+			victim.predisposition,
+			breedyEater.scale,
+			breedyEater.starvation
+		]);
+		if (Math.round(decision[0])) {
+			alert(breedyEater.name + ' would eat ' + victim.animal);
+		} else {
+			alert(breedyEater.name + ' would NOT eat ' + victim.animal);
+		}
 	})
 	.catch(_ => (
 		console.error('Not evolved')
