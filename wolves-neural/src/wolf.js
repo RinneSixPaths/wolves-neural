@@ -7,6 +7,7 @@ class Wolf extends Network {
 		super();
 		
 		this.name = name;
+        this.pic = './wolf.png';
 		this.starvation = hunger;
 		this.scale = scale;
 	}
@@ -37,7 +38,10 @@ class Wolf extends Network {
 		});
 	}
 
-	increaseSatrvation() {
+	increaseStarvation() {
+        if (this.starvation === 1) {
+            return;
+        }
 		this.starvation += 0.1;
 	}
 
@@ -46,14 +50,8 @@ class Wolf extends Network {
 	}
 }
 
-class Victim {
-	constructor(animal = 'rabbit', carnivores = 1, scale = 1, toxicity = 1, predisposition = 1) {
-		this.animal = animal;
-		this.carnivores = carnivores;
-		this.scale= scale;
-		this.toxicity = toxicity;
-		this.predisposition = predisposition;
-	}
+function getRandom(min, max){
+  return Math.random() * (max - min) + min;
 }
 
 const breedyEater = new Wolf('Breedy', 1, 0);
@@ -334,7 +332,10 @@ breedyEater
 	.evolve(foodTrainer, trainingSet, options)
 	.then(_ => {
 		console.log('evolved');
-		return new Victim('lizard', .5, .2, .8, .1);
+        const hungerTimer = setInterval(_ => {
+            breedyEater.increaseStarvation();
+        }, 1000);
+		return new Victim('lizard', .5, .2, .8, .1, 1, './chameleon.png');
 	})
 	.then(victim => {
 		const decision = breedyEater.activate([
@@ -346,11 +347,11 @@ breedyEater
 			breedyEater.starvation
 		]);
 		if (Math.round(decision[0])) {
-			alert(breedyEater.name + ' would eat ' + victim.animal);
+			console.log(breedyEater.name + ' would eat ' + victim.animal);
 		} else {
-			alert(breedyEater.name + ' would NOT eat ' + victim.animal);
+			console.log(breedyEater.name + ' would NOT eat ' + victim.animal);
 		}
-		return new Victim('rabbit', .1, .3, .05, .9);
+		return new Victim('rabbit', .1, .3, .05, .9, 1, './rabbit.png');
 	})
 	.then(victim => {
 		const decision = breedyEater.activate([
@@ -362,25 +363,14 @@ breedyEater
 			breedyEater.starvation
 		]);
 		if (Math.round(decision[0])) {
-			alert(breedyEater.name + ' would eat ' + victim.animal);
+			console.log(breedyEater.name + ' would eat ' + victim.animal);
 		} else {
-			alert(breedyEater.name + ' would NOT eat ' + victim.animal);
+			console.log(breedyEater.name + ' would NOT eat ' + victim.animal);
 		}
 	})
-	.catch(_ => (
-		console.error('Not evolved')
-	));
+	.catch(err => {
+        console.log(err);
+		console.error('Not evolved');
+    });
 
-	console.log('evolving');
-	//const lizard = new Victim('lizard', .5, .2, .8, .1);
-
-/*
-breedyEater.activate([0, 0, 0])
-breedyEater.activate([0, 0, 1])
-breedyEater.activate([0, 1, 0])
-breedyEater.activate([0, 1, 1])
-breedyEater.activate([1, 0, 0])
-breedyEater.activate([1, 0, 1])
-breedyEater.activate([1, 1, 0])
-breedyEater.activate([1, 1, 1])
-*/
+console.log('evolving');
