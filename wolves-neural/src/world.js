@@ -274,12 +274,19 @@ const trainingSet = [
 const victims = [];
 const wolves = [];
 
-
+let animaInterval = null;
 let animals = [];
 
 const clearCanvas = _ => ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 const getRandom = (min, max) => Math.random() * (max - min) + min;
+
+const eatingSound = src => {
+    const music = new Audio();
+    music.autoplay = false;
+    music.src = src;
+    music.play();
+}
 
 const render = _ => {
     const wHeight = $(window).height();
@@ -292,7 +299,7 @@ const render = _ => {
 }
 
 const animateAnimals = animals => {
-    setInterval(_ => { 
+    animaInterval = setInterval(_ => {
         clearCanvas();
     
         animals.forEach((animal) => {
@@ -323,6 +330,33 @@ const resetPic = animal => {
     animal.yPos = canvas.height + animal.scale;   
   }
   draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
+}
+
+const checkCollision = (victim, wolf, index) => {
+    const line = Math.sqrt(Math.pow((wolf.xPos - victim.xPos), 2) + Math.pow((wolf.yPos - victim.yPos), 2));
+    if (line <= (190 + wolf.scale * 10)/2 + (190 + victim.scale * 10)/2) {
+        const decision = wolf.activate([
+            victim.carnivores,
+            victim.scale,
+            victim.toxicity,
+            victim.predisposition,
+            wolf.scale,
+            wolf.starvation
+        ]);
+        if (Math.round(decision[0])) {
+            console.log(wolf.name + ' would eat ' + victim.animal);
+            victims.splice(index, 1);
+            clearInterval(animaInterval);
+            animals = victims.concat(wolves);
+            animateAnimals(animals);
+            eatingSound('./eating.mp3');
+            wolf.resetStarvation();
+        } else {
+            console.log(wolf.name + ' would NOT eat ' + victim.animal);
+        }
+    } else {
+        //STARVE :(
+    }
 }
 
 const evolveWolves = wolves => {
@@ -386,11 +420,15 @@ victims.push(new Victim('reindeer', .2, .8, .1, .7, 1, './reindeer.png'));
 victims.push(new Victim('bear', .8, .8, .1, .2, 1, './bear.png'));
 victims.push(new Victim('sheep', .1, .5, .08, .7, 1, './sheep.png'));
 /*Blank victim adds a demon*/
-//animals.push(new Victim());
-//animals.push(new Victim());
+//victims.push(new Victim());
 
-wolves.push(new Wolf('Breedy', 1, 0));
+wolves.push(new Wolf('Breedy', .5, .1));
 evolveWolves(wolves);
 animals = victims.concat(wolves);
 animateAnimals(animals);
-//animateAnimals(wolves);
+
+const hunt = setInterval((victims) => {
+    victims.forEach((victim, index) => {
+        checkCollision(victim, wolves[0], index);
+    });
+}, 1000, victims);

@@ -54,8 +54,9 @@ class Wolf extends Network {
 	}
 
 	increaseStarvation() {
-        if (this.starvation === 1) {
-            return;
+        if (this.starvation > 1) {
+			eatingSound('./not.mp3');
+			this.resetStarvation();
         }
 		this.starvation += 0.1;
 	}
