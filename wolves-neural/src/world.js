@@ -307,9 +307,9 @@ const animateAnimals = animals => {
             animal.yPos -= animal.yVelocity;
             
             if (
-                animal.xPos >= canvas.width + animal.scale 
-                || animal.yPos >= canvas.height + animal.scale
-                || animal.yPos < -(animal.scale)
+                animal.xPos >= canvas.width + 190 + animal.scale*10 
+                || animal.yPos >= canvas.height + 190 + animal.scale*10
+                || animal.yPos < -(190 + animal.scale*10)
             ) {
                 resetPic(animal);
             } else {
@@ -327,7 +327,7 @@ const resetPic = animal => {
   const random = getRandom(0, 1);
 
   if (random > .5) {
-    animal.xPos = 0;
+    animal.xPos = -(190 + animal.scale * 10);
     animal.yPos = getRandom(0, canvas.height);
   } else {
     animal.xPos = getRandom(0, canvas.width);
@@ -474,4 +474,4 @@ const hunt = setInterval(victims => {
             wolf.hunting(wolf.foodPreferences[minIndex]);
         }
     });
-}, 1000, victims);
+}, 500, victims);
