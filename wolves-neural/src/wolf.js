@@ -3,13 +3,26 @@ const Layer = synaptic.Layer;
 const Trainer = synaptic.Trainer;
 
 class Wolf extends Network {
-	constructor(name = 'Wolf', hunger = 1, scale = 1) {
+	constructor(
+		name = 'Wolf', 
+		hunger = 1, 
+		scale = 1,
+        speed = 1
+	) {
 		super();
 		
 		this.name = name;
-        this.pic = './wolf.png';
 		this.starvation = hunger;
 		this.scale = scale;
+
+		/*ANIMATION PROPS*/
+		this.maxSpeed = speed;
+		this.xPos = getRandom(0, canvas.width);
+		this.yPos = getRandom(0, canvas.height);
+		this.xVelocity = getRandom(.1, this.maxSpeed);
+		this.yVelocity = getRandom(.1, this.maxSpeed);
+		this.pic = new Image();
+		this.pic.src = './wolf.png';
 	}
 
 	createBrain(input = [], hidden = [], output = []) {
@@ -28,9 +41,11 @@ class Wolf extends Network {
 	}
 
 	evolve(trainer = {}, trainingSet = [], options = {}) {
+		/*2^6*/
+		this.createBrain(6, 6, 1);
 		return new Promise((resolve, reject) => {
 			if (trainingSet.length) {
-				foodTrainer.train(trainingSet, options);
+				trainer.train(trainingSet, options);
 				resolve();
 			} else {
 				reject();
@@ -49,328 +64,3 @@ class Wolf extends Network {
 		this.starvation = 0;
 	}
 }
-
-function getRandom(min, max){
-  return Math.random() * (max - min) + min;
-}
-
-const breedyEater = new Wolf('Breedy', 1, 0);
-breedyEater.createBrain(6, 6, 1);
-const foodTrainer = new Trainer(breedyEater);
-
-const options = {
-	rate: .3,
-	iterations: 1000000,
-	error: .005,
-	shuffle: true,
-	log: 1000,
-	cost: Trainer.cost.CROSS_ENTROPY
-}
-
-const trainingSet = [
-  {
-    input: [0, 0, 0, 0, 0, 0],
-    output: [0]
-  },
-  {
-    input: [0, 0, 0, 0, 0, 1],
-    output: [1]
-  },
-  {
-    input: [0, 0, 0, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 0, 0, 0, 1, 1],
-    output: [1]
-	},
-	{
-    input: [0, 0, 0, 1, 0, 0],
-    output: [1]
-	},
-	{
-    input: [0, 0, 0, 1, 0, 1],
-    output: [1]
-	},
-	{
-    input: [0, 0, 0, 1, 1, 0],
-    output: [1]
-	},
-	{
-    input: [0, 0, 0, 1, 1, 1],
-    output: [1]
-	},
-	{
-    input: [0, 0, 1, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 0, 0, 1],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 0, 1, 1],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 1, 0, 1],
-    output: [1]
-	},
-	{
-    input: [0, 0, 1, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 0, 1, 1, 1, 1],
-    output: [1]
-	},
-	{
-    input: [0, 1, 0, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 0, 0, 0, 1],
-    output: [1]
-	},
-	{
-    input: [0, 1, 0, 0, 1, 0],
-    output: [1]
-	},
-	{
-    input: [0, 1, 0, 0, 1, 1],
-    output: [1]
-	},
-	{
-    input: [0, 1, 0, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 0, 1, 0, 1],
-    output: [1]
-	},
-	{
-    input: [0, 1, 0, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 0, 1, 1, 1],
-    output: [1]
-	},
-	{
-    input: [0, 1, 1, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 0, 0, 1],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 0, 1, 1],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 1, 0, 1],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [0, 1, 1, 1, 1, 1],
-    output: [1]
-  },
-	////////////////////////////////////////////////////////
-	{
-    input: [1, 0, 0, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 0, 0, 0, 1],
-    output: [1]
-	},
-	{
-    input: [1, 0, 0, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 0, 0, 1, 1],
-    output: [1]
-	},
-	{
-    input: [1, 0, 0, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 0, 1, 0, 1],
-    output: [1]
-	},
-	{
-    input: [1, 0, 0, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 0, 1, 1, 1],
-    output: [1]
-	},
-	{
-    input: [1, 0, 1, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 0, 0, 1],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 0, 1, 1],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 1, 0, 1],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 0, 1, 1, 1, 1],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 0, 0, 1],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 0, 1, 1],
-    output: [1]
-	},
-	{
-    input: [1, 1, 0, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 1, 0, 1],
-    output: [1]
-	},
-	{
-    input: [1, 1, 0, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 0, 1, 1, 1],
-    output: [1]
-	},
-	{
-    input: [1, 1, 1, 0, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 0, 0, 1],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 0, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 0, 1, 1],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 1, 0, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 1, 0, 1],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 1, 1, 0],
-    output: [0]
-	},
-	{
-    input: [1, 1, 1, 1, 1, 1],
-    output: [0]
-	},
-	
-];
-
-breedyEater
-	.evolve(foodTrainer, trainingSet, options)
-	.then(_ => {
-		console.log('evolved');
-        const hungerTimer = setInterval(_ => {
-            breedyEater.increaseStarvation();
-        }, 1000);
-		return new Victim('lizard', .5, .2, .8, .1, 1, './chameleon.png');
-	})
-	.then(victim => {
-		const decision = breedyEater.activate([
-			victim.carnivores,
-			victim.scale,
-			victim.toxicity,
-			victim.predisposition,
-			breedyEater.scale,
-			breedyEater.starvation
-		]);
-		if (Math.round(decision[0])) {
-			console.log(breedyEater.name + ' would eat ' + victim.animal);
-		} else {
-			console.log(breedyEater.name + ' would NOT eat ' + victim.animal);
-		}
-		return new Victim('rabbit', .1, .3, .05, .9, 1, './rabbit.png');
-	})
-	.then(victim => {
-		const decision = breedyEater.activate([
-			victim.carnivores,
-			victim.scale,
-			victim.toxicity,
-			victim.predisposition,
-			breedyEater.scale,
-			breedyEater.starvation
-		]);
-		if (Math.round(decision[0])) {
-			console.log(breedyEater.name + ' would eat ' + victim.animal);
-		} else {
-			console.log(breedyEater.name + ' would NOT eat ' + victim.animal);
-		}
-	})
-	.catch(err => {
-        console.log(err);
-		console.error('Not evolved');
-    });
-
-console.log('evolving');
