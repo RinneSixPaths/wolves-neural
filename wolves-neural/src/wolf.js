@@ -42,7 +42,6 @@ class Wolf extends Network {
 	}
 
 	evolve(trainer = {}, trainingSet = [], options = {}) {
-		/*2^6*/
 		this.createBrain(6, 6, 1);
 		return new Promise((resolve, reject) => {
 			if (trainingSet.length) {
@@ -56,8 +55,9 @@ class Wolf extends Network {
 
 	increaseStarvation() {
         if (this.starvation > 1) {
-			eatingSound('./not.mp3');
-			this.resetStarvation();
+			//eatingSound('./not.mp3');
+			//this.resetStarvation();
+			return;
         }
 		this.starvation += 0.1;
 	}
@@ -71,7 +71,7 @@ class Wolf extends Network {
 			return;
 		}
 		const speedX = (victim.xPos - this.xPos)/100;
-		const speedY = (victim.yPos- this.yPos)/100;
+		const speedY = (victim.yPos - this.yPos)/100;
 		this.xVelocity = speedX;
 		this.yVelocity = speedY;
 	}

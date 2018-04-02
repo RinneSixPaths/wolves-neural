@@ -307,9 +307,9 @@ const animateAnimals = animals => {
             animal.yPos -= animal.yVelocity;
             
             if (
-                animal.xPos >= canvas.width + 190 + animal.scale * 10 
-                || animal.yPos >= canvas.height + 190 + animal.scale * 10
-                || animal.yPos < -(190 + animal.scale * 10)
+                animal.xPos >= canvas.width + animal.scale 
+                || animal.yPos >= canvas.height + animal.scale
+                || animal.yPos < -(animal.scale)
             ) {
                 resetPic(animal);
             } else {
@@ -327,11 +327,11 @@ const resetPic = animal => {
   const random = getRandom(0, 1);
 
   if (random > .5) {
-    animal.xPos = -(190 + animal.scale * 10);
+    animal.xPos = 0;
     animal.yPos = getRandom(0, canvas.height);
   } else {
     animal.xPos = getRandom(0, canvas.width);
-    animal.yPos = canvas.height + animal.scale;   
+    animal.yPos = canvas.height;   
   }
   draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
 }
@@ -444,18 +444,13 @@ victims.push(new Victim('sheep', .1, .5, .08, .7, 1, './sheep.png'));
 //victims.push(new Victim());
 
 wolves.push(new Wolf('Breedy', .5, .1));
-wolves.push(new Wolf('Hungryd', 0, .9));
+//wolves.push(new Wolf('Hungryd', 0, .9));
 evolveWolves(wolves);
 animals = victims.concat(wolves);
 animateAnimals(animals);
 
 const check = setInterval(victims => {
     wolves.forEach(wolf => {
-        //wolf.foodPreferences = victims.filter(victim => wouldEat(victim, wolf));
-        /*if (wolf.foodPreferences[0]) {
-            const nearest = Math.min
-        }*/
-        //wolf.hunting(wolf.foodPreferences[0]);
         victims.forEach((victim, index) => {
             checkCollision(victim, wolf, index);
         });
@@ -465,9 +460,18 @@ const check = setInterval(victims => {
 const hunt = setInterval(victims => {
     wolves.forEach(wolf => {
         wolf.foodPreferences = victims.filter(victim => wouldEat(victim, wolf));
-        /*if (wolf.foodPreferences[0]) {
-            const nearest = Math.min
-        }*/
-        wolf.hunting(wolf.foodPreferences[0]);
+        if (wolf.foodPreferences[0]) {
+            let minLine = Math.sqrt(Math.pow((wolf.xPos - wolf.foodPreferences[0].xPos), 2) + Math.pow((wolf.yPos - wolf.foodPreferences[0].yPos), 2));;
+            let minIndex = 0;
+            wolf.foodPreferences.forEach((victim, index) => {
+                let newLine = Math.sqrt(Math.pow((wolf.xPos - victim.xPos), 2) + Math.pow((wolf.yPos - victim.yPos), 2));
+                if (newLine < minLine) {
+                    minLine = newLine;
+                    minIndex = index;
+                }
+            });
+            wolf.resetVelocity();
+            wolf.hunting(wolf.foodPreferences[minIndex]);
+        }
     });
 }, 1000, victims);
