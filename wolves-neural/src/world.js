@@ -306,7 +306,11 @@ const animateAnimals = animals => {
             animal.xPos += animal.xVelocity;
             animal.yPos -= animal.yVelocity;
             
-            if (animal.xPos > canvas.width + animal.scale || animal.yPos > canvas.height + animal.scale) {
+            if (
+                animal.xPos >= canvas.width + 190 + animal.scale * 10 
+                || animal.yPos >= canvas.height + 190 + animal.scale * 10
+                || animal.yPos < -(190 + animal.scale * 10)
+            ) {
                 resetPic(animal);
             } else {
                 draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
@@ -323,7 +327,7 @@ const resetPic = animal => {
   const random = getRandom(0, 1);
 
   if (random > .5) {
-    animal.xPos = -190 + animal.scale * 10;
+    animal.xPos = -(190 + animal.scale * 10);
     animal.yPos = getRandom(0, canvas.height);
   } else {
     animal.xPos = getRandom(0, canvas.width);
@@ -351,6 +355,7 @@ const checkCollision = (victim, wolf, index) => {
             animateAnimals(animals);
             eatingSound('./eating.mp3');
             wolf.resetStarvation();
+            wolf.resetVelocity();
         } else {
             console.log(wolf.name + ' would NOT eat ' + victim.animal);
         }
@@ -410,6 +415,22 @@ const evolveWolves = wolves => {
     });
 }
 
+const wouldEat = (victim, wolf) => {
+    const decision = wolf.activate([
+        victim.carnivores,
+        victim.scale,
+        victim.toxicity,
+        victim.predisposition,
+        wolf.scale,
+        wolf.starvation
+    ]);
+    if (Math.round(decision[0])) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 render();
 victims.push(new Victim('chameleon', .5, .3, .8, .1, 1, './chameleon.png'));
 victims.push(new Victim('fox', .8, .6, .1, .1, 1, './fox.png'));
@@ -423,12 +444,30 @@ victims.push(new Victim('sheep', .1, .5, .08, .7, 1, './sheep.png'));
 //victims.push(new Victim());
 
 wolves.push(new Wolf('Breedy', .5, .1));
+wolves.push(new Wolf('Hungryd', 0, .9));
 evolveWolves(wolves);
 animals = victims.concat(wolves);
 animateAnimals(animals);
 
-const hunt = setInterval((victims) => {
-    victims.forEach((victim, index) => {
-        checkCollision(victim, wolves[0], index);
+const check = setInterval(victims => {
+    wolves.forEach(wolf => {
+        //wolf.foodPreferences = victims.filter(victim => wouldEat(victim, wolf));
+        /*if (wolf.foodPreferences[0]) {
+            const nearest = Math.min
+        }*/
+        //wolf.hunting(wolf.foodPreferences[0]);
+        victims.forEach((victim, index) => {
+            checkCollision(victim, wolf, index);
+        });
+    });
+}, 100, victims);
+
+const hunt = setInterval(victims => {
+    wolves.forEach(wolf => {
+        wolf.foodPreferences = victims.filter(victim => wouldEat(victim, wolf));
+        /*if (wolf.foodPreferences[0]) {
+            const nearest = Math.min
+        }*/
+        wolf.hunting(wolf.foodPreferences[0]);
     });
 }, 1000, victims);

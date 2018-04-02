@@ -7,13 +7,14 @@ class Wolf extends Network {
 		name = 'Wolf', 
 		hunger = 1, 
 		scale = 1,
-        speed = 1
+        speed = 2
 	) {
 		super();
 		
 		this.name = name;
 		this.starvation = hunger;
 		this.scale = scale;
+		this.foodPreferences = [];
 
 		/*ANIMATION PROPS*/
 		this.maxSpeed = speed;
@@ -63,5 +64,20 @@ class Wolf extends Network {
 
 	resetStarvation() {
 		this.starvation = 0;
+	}
+
+	hunting(victim) {
+		if (!victim) {
+			return;
+		}
+		const speedX = (victim.xPos - this.xPos)/100;
+		const speedY = (victim.yPos- this.yPos)/100;
+		this.xVelocity = speedX;
+		this.yVelocity = speedY;
+	}
+
+	resetVelocity() {
+		this.xVelocity = getRandom(.1, this.maxSpeed);
+		this.yVelocity = getRandom(.1, this.maxSpeed);
 	}
 }
