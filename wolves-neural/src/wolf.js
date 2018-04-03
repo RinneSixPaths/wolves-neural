@@ -15,7 +15,9 @@ class Wolf extends Network {
 		this.starvation = hunger;
 		this.scale = scale;
 		this.foodPreferences = [];
-		this.huntTarget = 0;
+		this.huntTarget = null;
+		this.starveTimer = null;
+		this.hungerTimer = null;
 
 		/*ANIMATION PROPS*/
 		this.maxSpeed = speed;
@@ -42,20 +44,23 @@ class Wolf extends Network {
 		});
 	}
 
-	evolve(trainer = {}, trainingSet = [], options = {}) {
+	evolve(trainer = {}, trainingSet = [], options = {}, callback = _ => {}) {
 		this.createBrain(6, 6, 1);
 		return new Promise((resolve, reject) => {
 			if (trainingSet.length) {
 				trainer.train(trainingSet, options);
-				resolve();
+				resolve(callback);
 			} else {
 				reject();
 			}
 		});
 	}
 
-	increaseStarvation() {
-		if (this.starvation > 1) {
+	increaseStarvation(callback = _ => {}) {
+		if (this.starvation >= 1) {
+			if (!this.starveTimer) {
+				this.starveTimer = setTimeout(callback, 10000, this);
+			}
 			return;
 		}
 		if (this.starvation >= .5 && this.starvation < .6) {
@@ -68,14 +73,30 @@ class Wolf extends Network {
 		this.starvation = 0;
 	}
 
-	hunting(victim) {
-		if (!victim) {
+	hunting() {
+		if (!this.huntTarget) {
 			return;
 		}
-		const speedX = (this.xPos - victim.xPos)/100;
-		const speedY = (this.yPos - victim.yPos)/100;
+		const speedX = (this.xPos - this.huntTarget.xPos)/100;
+		const speedY = (this.yPos - this.huntTarget.yPos)/100;
 		this.xVelocity = -speedX;
 		this.yVelocity = -speedY;
+	}
+
+	wouldEat(victim) {
+		const decision = this.activate([
+			victim.carnivores,
+			victim.scale,
+			victim.toxicity,
+			victim.predisposition,
+			this.scale,
+			this.starvation
+		]);
+		if (Math.round(decision[0])) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	resetVelocity() {
