@@ -15,6 +15,7 @@ class Wolf extends Network {
 		this.starvation = hunger;
 		this.scale = scale;
 		this.foodPreferences = [];
+		this.huntTarget = 0;
 
 		/*ANIMATION PROPS*/
 		this.maxSpeed = speed;
@@ -54,14 +55,12 @@ class Wolf extends Network {
 	}
 
 	increaseStarvation() {
-        if (this.starvation > 1) {
-			//eatingSound('./not.mp3');
-			//this.resetStarvation();
+		if (this.starvation > 1) {
 			return;
-        }
-	if (this.starvation === .5) {
-		eatingSound('./not.mp3');
-	}
+		}
+		if (this.starvation >= .5 && this.starvation < .6) {
+			eatingSound('./not.mp3');
+		}
 		this.starvation += 0.1;
 	}
 
@@ -73,10 +72,10 @@ class Wolf extends Network {
 		if (!victim) {
 			return;
 		}
-		const speedX = (victim.xPos - this.xPos)/100;
-		const speedY = (victim.yPos - this.yPos)/100;
-		this.xVelocity = speedX;
-		this.yVelocity = speedY;
+		const speedX = (this.xPos - victim.xPos)/100;
+		const speedY = (this.yPos - victim.yPos)/100;
+		this.xVelocity = -speedX;
+		this.yVelocity = -speedY;
 	}
 
 	resetVelocity() {

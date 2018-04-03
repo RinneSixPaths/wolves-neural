@@ -304,12 +304,12 @@ const animateAnimals = animals => {
     
         animals.forEach((animal) => {
             animal.xPos += animal.xVelocity;
-            animal.yPos -= animal.yVelocity;
+            animal.yPos += animal.yVelocity;
             
             if (
-                animal.xPos >= canvas.width + 190 + animal.scale*10 
-                || animal.yPos >= canvas.height + 190 + animal.scale*10
-                || animal.yPos < -(190 + animal.scale*10)
+                animal.xPos >= canvas.width + 170 + animal.scale*10
+                || animal.yPos >= canvas.height + 170 + animal.scale*10
+                || animal.yPos < -(170 + animal.scale*10)
             ) {
                 resetPic(animal);
             } else {
@@ -320,25 +320,20 @@ const animateAnimals = animals => {
 }
 
 const draw = (pic, xPos, yPos, scale) => {
-    ctx.drawImage(pic, xPos, yPos, 190 + scale * 10, 190 + scale * 10);
+    ctx.drawImage(pic, xPos, yPos, 170 + scale * 10, 170 + scale * 10);
 }
 
 const resetPic = animal => {
-  const random = getRandom(0, 1);
+    const random = getRandom(0, 1);
+    animal.xPos = -(170 + animal.scale * 10)/2;
+    animal.yPos = getRandom(0, canvas.height - 170);
 
-  if (random > .5) {
-    animal.xPos = -(190 + animal.scale * 10);
-    animal.yPos = getRandom(0, canvas.height);
-  } else {
-    animal.xPos = getRandom(0, canvas.width);
-    animal.yPos = canvas.height;   
-  }
-  draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
+    draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
 }
 
 const checkCollision = (victim, wolf, index) => {
     const line = Math.sqrt(Math.pow((wolf.xPos - victim.xPos), 2) + Math.pow((wolf.yPos - victim.yPos), 2));
-    if (line <= (190 + wolf.scale * 10)/2 + (190 + victim.scale * 10)/2) {
+    if (line <= (170 + wolf.scale * 10)/2 + (170 + victim.scale * 10)/2) {
         const decision = wolf.activate([
             victim.carnivores,
             victim.scale,
@@ -373,6 +368,7 @@ const evolveWolves = wolves => {
                 console.log('evolved');
                 const hungerTimer = setInterval(_ => {
                     wolf.increaseStarvation();
+                    hunt(victims);
                 }, 1000);
                 return new Victim('lizard', .5, .2, .8, .1, 1, './chameleon.png');
             })
@@ -457,7 +453,7 @@ const check = setInterval(victims => {
     });
 }, 100, victims);
 
-const hunt = setInterval(victims => {
+const hunt = victims => {
     wolves.forEach(wolf => {
         wolf.foodPreferences = victims.filter(victim => wouldEat(victim, wolf));
         if (wolf.foodPreferences[0]) {
@@ -474,4 +470,4 @@ const hunt = setInterval(victims => {
             wolf.hunting(wolf.foodPreferences[minIndex]);
         }
     });
-}, 500, victims);
+}
