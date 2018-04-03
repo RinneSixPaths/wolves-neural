@@ -4,11 +4,10 @@
 	<meta charset="UTF-8">
 	<title>Wolves</title>
 	<script src="src/synaptic.js"></script>
-	
 	<script src="src/jquery-3.1.1.min.js"></script>
 	<style>
 		body {
-			background-color:rgb(248, 246, 227);
+			background-color:rgb(221, 255, 183);
 		}
         canvas { 
             display:block; 
@@ -21,59 +20,51 @@
 </head>
 <body>
 	<img src="./wolf.png" width="200px" height="200px" alt=""><br>
-	Add an animal
-	<input type="text" id="animal-type"><br>
+	Add wolf
+	<!--<input type="text" id="animal-type"><br>
 	carnivores <input type="range" id="carnivores" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="carnivores-val"></span> <br>
 	scale <input type="range" id="scale" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="scale-val"></span> <br>
 	toxicity <input type="range" id="toxicity" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="toxicity-val"></span> <br>
 	predisposition <input type="range" id="predisposition" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="predisposition-val"></span><br>
-	<button onclick="feedWolf()">Feed!</button><br>
-	<a href="world.html">World</a>
+	<button onclick="feedWolf()">Feed!</button><br>-->
+	<input type="text" id="wolf-name" placeholder="Wolf name"><br>
+	Scale <input type="range" id="scale" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="scale-val"></span> <br>
+	Starvation <input type="range" id="starvation" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="starvation-val"></span> <br>
+	Speed <input type="range" id="speed" min="0" max="3" step="0.01" value="0.5" oninput="showVal()"><span id="speed-val"></span><br>
+	<button onclick="createWolf()">Create</button><br>
+	<a href="world.html">Go to World</a>
 	<canvas id="canvas">Sorry :(</canvas>
 	<script>
-        
-		function showVal() {
-			document.getElementById("carnivores-val").innerHTML = document.getElementById("carnivores").value;
+        function showVal() {
 			document.getElementById("scale-val").innerHTML = document.getElementById("scale").value;
-			document.getElementById("toxicity-val").innerHTML = document.getElementById("toxicity").value;
-			document.getElementById("predisposition-val").innerHTML = document.getElementById("predisposition").value;
+			document.getElementById("starvation-val").innerHTML = document.getElementById("starvation").value;
+			document.getElementById("speed-val").innerHTML = document.getElementById("speed").value;
 		}
 
-		function feedWolf() {
-			const type = document.getElementById("animal-type").value;
-			if (!type) return;
-			const carnivores = document.getElementById("carnivores").value;
+		function createWolf() {
+			const name = document.getElementById("wolf-name").value;
+			if (!name) return;
 			const scale = document.getElementById("scale").value;
-			const toxicity = document.getElementById("toxicity").value;
-			const predisposition = document.getElementById("predisposition").value;
-			var newVictim = new Victim(type, carnivores, scale, toxicity, predisposition);
-			const decision = breedyEater.activate([
-				newVictim.carnivores,
-				newVictim.scale,
-				newVictim.toxicity,
-				newVictim.predisposition,
-				breedyEater.scale,
-				breedyEater.starvation
-			]);
-			console.log(decision);
-			if (Math.round(decision[0])) {
-				alert(breedyEater.name + ' would eat ' + newVictim.animal);
-				eating();
-			} else {
-				alert(breedyEater.name + ' would NOT eat ' + newVictim.animal);
-			}
+			const starvation = document.getElementById("starvation").value;
+			const speed = document.getElementById("speed").value;
+			//console.log(wolves);
+			const newWolf = new Wolf(name, scale, starvation, speed);
+			evolveWolves([newWolf]);
+			wolves.push(newWolf);
 		}
 
 		function eating() {
 			const music = new Audio();
 			music.autoplay = false;
 			music.src = './eating.mp3';
-        	music.play();
+			music.play();
 		}
 
 		showVal();
+		
 	</script>
 	<script src="src/victim.js"></script>
 	<script src="src/wolf.js"></script>
+	<script src="src/world.js"></script>
 </body>
 </html>

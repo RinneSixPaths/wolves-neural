@@ -284,7 +284,7 @@ const trainingSet = [
 	
 ];
 const victims = [];
-const wolves = [];
+var wolves = [];
 /*TODO: PURIFY FUNCTIONS*/
 let animaInterval = null;
 let animals = [];
