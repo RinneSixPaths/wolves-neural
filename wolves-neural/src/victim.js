@@ -1,12 +1,21 @@
+const monsterIcons = [
+  './monster1.png', 
+  './monster2.png', 
+  './monster3.png', 
+  './monster4.png', 
+  './monster5.png', 
+  './monster6.png'
+];
+
 class Victim {
 	constructor(
-        animal = 'demon',
+        animal = 'monster',
         carnivores = .9, 
         scale = 1,
         toxicity = .5,
         predisposition = .1,
         speed = 1,
-        picSrc = demons[Math.floor(getRandom(0, demons.length))]
+        picSrc = monsterIcons[Math.floor(getRandom(0, monsterIcons.length))]
     ) {
 		this.animal = animal;
 		this.carnivores = carnivores;

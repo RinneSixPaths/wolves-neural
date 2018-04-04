@@ -50,22 +50,75 @@
             border-spacing: 0;
         }
 		body {
-			background-color:rgb(165, 232, 153);
+            position: relative;
 		}
+        .main-wrapper {
+            width: 100%;
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
          canvas { display:block; position: absolute;}
         a {
             position: absolute;
         }
         #canvas{
-            background-size: cover;
+            background-color:rgb(225, 255, 191);
+        }
+        #create-wolf-container {
+            width: 100%;
+            background-color: rgba(65, 179, 84, 0.5);
+        }
+        #create-animal-container {
+            width: 100%;
+            background-color: rgba(248, 237, 81, 0.5);
+        }
+        .flex-container {
+            position: absolute;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .hide {
+            display: none;
         }
 	</style>
 </head>
 <body>
+    <div class="main-wrapper">
+            <div id="create-wolf-container" class="flex-container hide">
+                <img src="./wolf.png" width="200px" height="200px" alt=""><br>
+                Wolf
+                <input type="text" id="wolf-name" placeholder="Wolf name"><br>
+                Scale <input type="range" id="wolf-scale" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="wolf-scale-val"></span> <br>
+                Starvation <input type="range" id="starvation" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="starvation-val"></span> <br>
+                Speed <input type="range" id="wolf-speed" min="0" max="3" step="0.01" value="0.5" oninput="showVal()"><span id="wolf-speed-val"></span><br>
+                <button onclick="createWolf()">Create</button><br>
+                <button onclick="toggleHide(event, 'create-wolf-container')">Cancel</button><br>
+            </div>
+            <div id="create-animal-container" class="flex-container hide">
+                <img src="./sheep.png" width="200px" height="200px" alt="">
+                Animal
+                <input type="text" id="animal-type"><br>
+                carnivores <input type="range" id="carnivores" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="carnivores-val"></span><br>
+                scale <input type="range" id="animal-scale" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="animal-scale-val"></span><br>
+                toxicity <input type="range" id="toxicity" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="toxicity-val"></span><br>
+                wolf predisposition <input type="range" id="predisposition" min="0" max="1" step="0.01" value="0.5" oninput="showVal()"><span id="predisposition-val"></span><br>
+                Speed <input type="range" id="animal-speed" min="0" max="3" step="0.01" value="0.5" oninput="showVal()"><span id="animal-speed-val"></span><br>
+                <button onclick="createAnimal()">Create</button><br>
+                <button onclick="toggleHide(event, 'create-animal-container')">Cancel</button>
+            </div>  
+    </div>
+
 	<canvas id="canvas">Sorry :(</canvas>
-	<a href="index.html">Back to wolf</a>
 	<script src="src/victim.js"></script>
 	<script src="src/wolf.js"></script>
     <script src="src/world.js"></script>
+
+    <a href="#" onclick="toggleHide(event, 'create-wolf-container')">Add a wolf</a><br>
+    <a href="#" onclick="toggleHide(event, 'create-animal-container')">Add an animal</a><br>
 </body>
 </html>

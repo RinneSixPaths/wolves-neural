@@ -1,6 +1,5 @@
 const Network = synaptic.Network;
 const Layer = synaptic.Layer;
-const Trainer = synaptic.Trainer;
 
 class Wolf extends Network {
 	constructor(

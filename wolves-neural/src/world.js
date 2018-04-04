@@ -1,3 +1,4 @@
+const addAnimalsWrapperSelector = '.main-wrapper';
 const imgs = [
     './pig.png', 
     './chameleon.png', 
@@ -12,9 +13,11 @@ const demons = [
     './medium_demon.png', 
     './big_demon.png'
 ];
-const canvas = document.getElementById('canvas');
+const canvasId = 'canvas';
+const canvas = document.getElementById(canvasId);
 const ctx = canvas.getContext('2d');
 const FPS = 60;
+const Trainer = synaptic.Trainer;
 const options = {
 	rate: .3,
 	iterations: 1000000,
@@ -284,8 +287,8 @@ const trainingSet = [
 	
 ];
 const victims = [];
-var wolves = [];
-/*TODO: PURIFY FUNCTIONS*/
+const wolves = [];
+
 let animaInterval = null;
 let animals = [];
 
@@ -462,6 +465,65 @@ const wolfDeath = wolf => {
     console.log(`${wolf.name} is dead`);
 }
 
+const toggleHide = (e, id) => {
+    let element;
+    if (!id) {
+        element = e.target;
+    } else {
+        element = document.getElementById(id);
+    }
+    element.classList.toggle("hide");
+}
+
+const clearNameFields = _ => {
+    document.getElementById("wolf-name").value = '';
+    document.getElementById("animal-type").value = '';
+}
+
+const showVal = () => {
+    document.getElementById("wolf-scale-val").innerHTML = document.getElementById("wolf-scale").value;
+    document.getElementById("starvation-val").innerHTML = document.getElementById("starvation").value;
+    document.getElementById("wolf-speed-val").innerHTML = document.getElementById("wolf-speed").value;
+
+    document.getElementById("animal-scale-val").innerHTML = document.getElementById("animal-scale").value;
+    document.getElementById("carnivores-val").innerHTML = document.getElementById("carnivores").value;
+    document.getElementById("toxicity-val").innerHTML = document.getElementById("toxicity").value;
+    document.getElementById("predisposition-val").innerHTML = document.getElementById("predisposition").value;
+    document.getElementById("animal-speed-val").innerHTML = document.getElementById("animal-speed").value;
+}
+
+function createWolf() {
+    const name = document.getElementById("wolf-name").value;
+    if (!name) {
+        return;
+    }
+    const scale = Number(document.getElementById("wolf-scale").value);
+    const starvation = Number(document.getElementById("starvation").value);
+    const speed = Number(document.getElementById("wolf-speed").value);
+    const newWolf = new Wolf(name, scale, starvation, speed);
+    evolveWolves([newWolf]);
+    wolves.push(newWolf);
+    resetAnimals();
+    clearNameFields();
+    toggleHide(null, 'create-wolf-container');
+}
+
+function createAnimal() {
+    const animal = document.getElementById("animal-type").value;
+    if (!animal) {
+        return;
+    }
+    const scale = Number(document.getElementById("animal-scale").value);
+    const carnivores = Number(document.getElementById("carnivores").value);
+    const toxicity = Number(document.getElementById("toxicity").value);
+    const predisposition = Number(document.getElementById("predisposition").value);
+    const speed = Number(document.getElementById("animal-speed").value);
+    victims.push(new Victim(animal, carnivores, scale, toxicity, predisposition, speed));
+    resetAnimals();
+    clearNameFields();
+    toggleHide(null, 'create-animal-container');
+}
+
 $(document).ready(_ => {
     render(canvas);
     victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
@@ -472,12 +534,14 @@ $(document).ready(_ => {
     victims.push(new Victim('reindeer', .2, .8, .1, .7, 2, './reindeer.png'));
     victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));
     victims.push(new Victim('sheep', .1, .5, .08, .7, 3, './sheep.png'));
-    /*Blank victim adds a demon*/
-    //victims.push(new Victim());
 
     wolves.push(new Wolf('Breedy', .5, .1));
     //wolves.push(new Wolf('Hungryd', 0, .9));
     evolveWolves(wolves);
     animals = victims.concat(wolves);
     animateAnimals(animals);
+
+    $(addAnimalsWrapperSelector).height($(window).height());
 });
+
+showVal();
