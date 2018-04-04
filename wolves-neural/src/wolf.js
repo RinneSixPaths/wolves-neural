@@ -70,6 +70,11 @@ class Wolf extends Network {
 
 	resetStarvation() {
 		this.starvation = 0;
+		
+		if(this.starveTimer) {
+			clearTimeout(this.starveTimer);
+			this.starveTimer = null;
+		}
 	}
 
 	hunting() {

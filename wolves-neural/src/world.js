@@ -294,8 +294,6 @@ let animals = [];
 
 const clearCanvas = _ => ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-const getRandom = (min, max) => Math.random() * (max - min) + min;
-
 const clearTimeouts = (timers) => {
     timers.forEach(timer => clearTimeout(timer));
 }
@@ -526,13 +524,13 @@ function createAnimal() {
 
 $(document).ready(_ => {
     render(canvas);
-    victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
+    /*victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
     victims.push(new Victim('fox', .8, .6, .1, .1, 2, './fox.png'));
     victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
     victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
     victims.push(new Victim('rabbit', .1, .4, .05, .9, 2, './rabbit.png'));
     victims.push(new Victim('reindeer', .2, .8, .1, .7, 2, './reindeer.png'));
-    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));
+    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));*/
     victims.push(new Victim('sheep', .1, .5, .08, .7, 3, './sheep.png'));
 
     wolves.push(new Wolf('Breedy', .5, .1));
