@@ -1,4 +1,3 @@
-const addAnimalsWrapperSelector = '.main-wrapper';
 const imgs = [
     './pig.png', 
     './chameleon.png', 
@@ -17,6 +16,8 @@ const canvasId = 'canvas';
 const canvas = document.getElementById(canvasId);
 const ctx = canvas.getContext('2d');
 const FPS = 60;
+const multiplier = 100;
+const additionalValue = 80;
 const Trainer = synaptic.Trainer;
 const options = {
 	rate: .3,
@@ -294,7 +295,7 @@ let animals = [];
 
 const clearCanvas = _ => ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-const clearTimeouts = (timers) => {
+const clearTimeouts = timers => {
     timers.forEach(timer => clearTimeout(timer));
 }
 
@@ -323,23 +324,28 @@ const animateAnimals = animals => {
             animal.xPos += animal.xVelocity;
             animal.yPos += animal.yVelocity;
 
-            if (animal.xPos >= canvas.width + (150 + animal.scale*10)) {
-                animal.xPos -= canvas.width + (150 + animal.scale*10);
-                animal.yPos = getRandom(0, canvas.height) + (150 + animal.scale*10);
-            } else if (animal.yPos >= canvas.height + (150 + animal.scale*10)/2) {
-                animal.xPos = getRandom(0, canvas.width) + (150 + animal.scale*10);
-                animal.yPos -= canvas.height + (150 + animal.scale*10);
-            } else if (animal.yPos < -(150 + animal.scale*10)) {
+            if (animal.xPos >= canvas.width - (additionalValue + animal.scale * multiplier)/5) {
+                animal.xPos = 0 - (additionalValue + animal.scale * multiplier) + (additionalValue + animal.scale * multiplier)/5;
+                animal.yPos = getRandom(0, canvas.height);
+            } else if (animal.yPos >= canvas.height - (additionalValue + animal.scale * multiplier)/5) {
                 animal.xPos = getRandom(0, canvas.width);
-                animal.yPos += canvas.height + (150 + animal.scale*10);
+                animal.yPos = 0 - (additionalValue + animal.scale * multiplier) + (additionalValue + animal.scale * multiplier)/5;
             }
-            draw(animal.pic, animal.xPos, animal.yPos, animal.scale);
+            else if (animal.yPos < 0 - (additionalValue + animal.scale * multiplier)) {
+                animal.xPos = getRandom(0, canvas.width);
+                animal.yPos = canvas.height - (additionalValue + animal.scale * multiplier) + (additionalValue + animal.scale * multiplier)/4;
+            }
+            else if (animal.xPos < 0 - (additionalValue + animal.scale * multiplier)) {
+                animal.xPos = canvas.width - (additionalValue + animal.scale * multiplier) + (additionalValue + animal.scale * multiplier)/4;
+                animal.yPos = getRandom(0, canvas.height);
+            }
+            draw(animal);
         });
     }, 1000/FPS);
 }
 
-const draw = (pic, xPos, yPos, scale) => {
-    ctx.drawImage(pic, xPos, yPos, 150 + scale * 10, 150 + scale * 10);
+const draw = ({ pic, xPos, yPos, scale }) => {
+    ctx.drawImage(pic, xPos, yPos, additionalValue + scale * multiplier, additionalValue + scale * multiplier);
 }
 
 const resetAnimals = _ => {
@@ -350,7 +356,7 @@ const resetAnimals = _ => {
 
 const checkCollision = (victim, wolf, index) => {
     const line = Math.sqrt(Math.pow((wolf.xPos - victim.xPos), 2) + Math.pow((wolf.yPos - victim.yPos), 2));
-    if (line <= (150 + wolf.scale * 10)/2 + (150 + victim.scale * 10)/2) {
+    if (line <= (additionalValue + wolf.scale * multiplier)/2 + (additionalValue + victim.scale * multiplier)/2) {
         const decision = wolf.activate([
             victim.carnivores,
             victim.scale,
@@ -455,7 +461,7 @@ const checkTimer = setInterval(victims => {
 }, 100, victims);
 
 const wolfDeath = wolf => {
-    const wolfToRemove = wolves.findIndex(wolf => wolf === wolf);
+    const wolfToRemove = wolves.findIndex(w => w === wolf);
     wolves.splice(wolfToRemove, 1);
     resetAnimals();
     clearTimeouts([wolf.hungerTimer, wolf.starveTimer]);
@@ -463,83 +469,19 @@ const wolfDeath = wolf => {
     console.log(`${wolf.name} is dead`);
 }
 
-const toggleHide = (e, id) => {
-    let element;
-    if (!id) {
-        element = e.target;
-    } else {
-        element = document.getElementById(id);
-    }
-    element.classList.toggle("hide");
-}
-
-const clearNameFields = _ => {
-    document.getElementById("wolf-name").value = '';
-    document.getElementById("animal-type").value = '';
-}
-
-const showVal = () => {
-    document.getElementById("wolf-scale-val").innerHTML = document.getElementById("wolf-scale").value;
-    document.getElementById("starvation-val").innerHTML = document.getElementById("starvation").value;
-    document.getElementById("wolf-speed-val").innerHTML = document.getElementById("wolf-speed").value;
-
-    document.getElementById("animal-scale-val").innerHTML = document.getElementById("animal-scale").value;
-    document.getElementById("carnivores-val").innerHTML = document.getElementById("carnivores").value;
-    document.getElementById("toxicity-val").innerHTML = document.getElementById("toxicity").value;
-    document.getElementById("predisposition-val").innerHTML = document.getElementById("predisposition").value;
-    document.getElementById("animal-speed-val").innerHTML = document.getElementById("animal-speed").value;
-}
-
-function createWolf() {
-    const name = document.getElementById("wolf-name").value;
-    if (!name) {
-        return;
-    }
-    const scale = Number(document.getElementById("wolf-scale").value);
-    const starvation = Number(document.getElementById("starvation").value);
-    const speed = Number(document.getElementById("wolf-speed").value);
-    const newWolf = new Wolf(name, scale, starvation, speed);
-    evolveWolves([newWolf]);
-    wolves.push(newWolf);
-    resetAnimals();
-    clearNameFields();
-    toggleHide(null, 'create-wolf-container');
-}
-
-function createAnimal() {
-    const animal = document.getElementById("animal-type").value;
-    if (!animal) {
-        return;
-    }
-    const scale = Number(document.getElementById("animal-scale").value);
-    const carnivores = Number(document.getElementById("carnivores").value);
-    const toxicity = Number(document.getElementById("toxicity").value);
-    const predisposition = Number(document.getElementById("predisposition").value);
-    const speed = Number(document.getElementById("animal-speed").value);
-    victims.push(new Victim(animal, carnivores, scale, toxicity, predisposition, speed));
-    resetAnimals();
-    clearNameFields();
-    toggleHide(null, 'create-animal-container');
-}
-
 $(document).ready(_ => {
     render(canvas);
-    /*victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
+    victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
     victims.push(new Victim('fox', .8, .6, .1, .1, 2, './fox.png'));
     victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
     victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
     victims.push(new Victim('rabbit', .1, .4, .05, .9, 2, './rabbit.png'));
     victims.push(new Victim('reindeer', .2, .8, .1, .7, 2, './reindeer.png'));
-    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));*/
+    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));
     victims.push(new Victim('sheep', .1, .5, .08, .7, 3, './sheep.png'));
 
-    wolves.push(new Wolf('Breedy', .5, .1));
-    //wolves.push(new Wolf('Hungryd', 0, .9));
+    wolves.push(new Wolf('Breedy', .5, .3, 4));
     evolveWolves(wolves);
     animals = victims.concat(wolves);
     animateAnimals(animals);
-
-    $(addAnimalsWrapperSelector).height($(window).height());
 });
-
-showVal();
