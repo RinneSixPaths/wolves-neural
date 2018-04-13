@@ -407,10 +407,10 @@ const evolveWolves = wolves => {
             .evolve(foodTrainer, trainingSet, options, hunt)
             .then(hunt => {
                 console.log('evolved');
-                wolf.hungerTimer = setInterval(_ => {
+                wolf.hungerTimer = setInterval(callback => {
                     wolf.increaseStarvation(wolfDeath);
-                    hunt(victims, wolves);
-                }, 1000);
+                    callback(victims, wolves);
+                }, 1000, hunt);
                 return new Victim('lizard', .5, .2, .8, .1, 1, './chameleon.png');
             })
             .then(victim => {

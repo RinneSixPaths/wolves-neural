@@ -81,10 +81,22 @@ class Wolf extends Network {
 		if (!this.huntTarget) {
 			return;
 		}
-		const speedX = (this.xPos - this.huntTarget.xPos)/100;
-		const speedY = (this.yPos - this.huntTarget.yPos)/100;
-		this.xVelocity = -speedX;
-		this.yVelocity = -speedY;
+
+		const speedX = (this.xPos - this.huntTarget.xPos);
+		const speedY = (this.yPos - this.huntTarget.yPos);
+		let divider = 100;
+		//SPEED BURST
+		if (
+			speedX < 200
+			&& speedY < 200
+			&& speedX > -200
+			&& speedY > -200
+		) {
+			divider = 50;
+		}
+
+		this.xVelocity = -speedX/divider;
+		this.yVelocity = -speedY/divider;
 	}
 
 	wouldEat(victim) {
