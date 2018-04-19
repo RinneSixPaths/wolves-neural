@@ -25,7 +25,7 @@ class Wolf extends Network {
 		this.xVelocity = getRandom(.1, this.maxSpeed);
 		this.yVelocity = getRandom(.1, this.maxSpeed);
 		this.pic = new Image();
-		this.pic.src = './wolf.png';
+		this.pic.src = './img/wolf.png';
 	}
 
 	createBrain(input = [], hidden = [], output = []) {
@@ -63,7 +63,7 @@ class Wolf extends Network {
 			return;
 		}
 		if (this.starvation >= .5 && this.starvation < .6) {
-			eatingSound('./not.mp3');
+			eatingSound('./sounds/not.mp3');
 		}
 		this.starvation += 0.1;
 	}

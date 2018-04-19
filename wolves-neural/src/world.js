@@ -1,16 +1,16 @@
 const imgs = [
-    './pig.png', 
-    './chameleon.png', 
-    './rabbit.png', 
-    './fox.png', 
-    './reindeer.png', 
-    './bear.png', 
-    './sheep.png'
+    './img/pig.png', 
+    './img/chameleon.png', 
+    './img/rabbit.png', 
+    './img/fox.png', 
+    './img/reindeer.png', 
+    './img/bear.png', 
+    './img/sheep.png'
 ];
 const demons = [
-    './demon.png', 
-    './medium_demon.png', 
-    './big_demon.png'
+    './img/demon.png', 
+    './img/medium_demon.png', 
+    './img/big_demon.png'
 ];
 const canvasId = 'canvas';
 const canvas = document.getElementById(canvasId);
@@ -369,7 +369,7 @@ const checkCollision = (victim, wolf, index) => {
             console.log(`${wolf.name} would eat ${victim.animal}`);
             victims.splice(index, 1);
             resetAnimals();
-            eatingSound('./eating.mp3');
+            eatingSound('./sounds/eating.mp3');
             wolf.resetStarvation();
             wolf.resetVelocity();
         } else {
@@ -411,7 +411,7 @@ const evolveWolves = wolves => {
                     wolf.increaseStarvation(wolfDeath);
                     callback(victims, wolves);
                 }, 1000, hunt);
-                return new Victim('lizard', .5, .2, .8, .1, 1, './chameleon.png');
+                return new Victim('lizard', .5, .2, .8, .1, 1, './img/chameleon.png');
             })
             .then(victim => {
                 const decision = wolf.activate([
@@ -427,7 +427,7 @@ const evolveWolves = wolves => {
                 } else {
                     console.log(`${wolf.name} would NOT eat ${victim.animal}`);
                 }
-                return new Victim('rabbit', .1, .3, .05, .9, 1, './rabbit.png');
+                return new Victim('rabbit', .1, .3, .05, .9, 1, './img/rabbit.png');
             })
             .then(victim => {
                 const decision = wolf.activate([
@@ -465,20 +465,20 @@ const wolfDeath = wolf => {
     wolves.splice(wolfToRemove, 1);
     resetAnimals();
     clearTimeouts([wolf.hungerTimer, wolf.starveTimer]);
-    eatingSound('./greetings.mp3');
+    eatingSound('./sounds/greetings.mp3');
     console.log(`${wolf.name} is dead`);
 }
 
 $(document).ready(_ => {
     render(canvas);
-    victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './chameleon.png'));
-    victims.push(new Victim('fox', .8, .6, .1, .1, 2, './fox.png'));
-    victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
-    victims.push(new Victim('pig', .3, .6, .2, .7, 2, './pig.png'));
-    victims.push(new Victim('rabbit', .1, .4, .05, .9, 2, './rabbit.png'));
-    victims.push(new Victim('reindeer', .2, .8, .1, .7, 2, './reindeer.png'));
-    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './bear.png'));
-    victims.push(new Victim('sheep', .1, .5, .08, .7, 3, './sheep.png'));
+    victims.push(new Victim('chameleon', .5, .3, .8, .1, 2, './img/chameleon.png'));
+    victims.push(new Victim('fox', .8, .6, .1, .1, 2, './img/fox.png'));
+    victims.push(new Victim('pig', .3, .6, .2, .7, 2, './img/pig.png'));
+    victims.push(new Victim('pig', .3, .6, .2, .7, 2, './img/pig.png'));
+    victims.push(new Victim('rabbit', .1, .4, .05, .9, 2, './img/rabbit.png'));
+    victims.push(new Victim('reindeer', .2, .8, .1, .7, 2, './img/reindeer.png'));
+    victims.push(new Victim('bear', .8, .8, .1, .2, 2, './img/bear.png'));
+    victims.push(new Victim('sheep', .1, .5, .08, .7, 3, './img/sheep.png'));
 
     wolves.push(new Wolf('Breedy', .5, .3, 4));
     evolveWolves(wolves);

@@ -1,10 +1,10 @@
 const monsterIcons = [
-  './monster1.png', 
-  './monster2.png', 
-  './monster3.png', 
-  './monster4.png', 
-  './monster5.png', 
-  './monster6.png'
+  './img/monster1.png', 
+  './img/monster2.png', 
+  './img/monster3.png', 
+  './img/monster4.png', 
+  './img/monster5.png', 
+  './img/monster6.png'
 ];
 
 class Victim {
