@@ -1,3 +1,10 @@
+import $ from '../libs/jquery-3.1.1.min';
+import * as synaptic from  'synaptic';
+import Wolf from '../entities/wolf';
+import Victim from '../entities/victim';
+import { getRandom, eatingSound } from '../services/worldService';
+import '../services/createService';
+
 const imgs = [
     './img/pig.png', 
     './img/chameleon.png', 
@@ -297,13 +304,6 @@ const clearCanvas = _ => ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 const clearTimeouts = timers => {
     timers.forEach(timer => clearTimeout(timer));
-}
-
-const eatingSound = src => {
-    const music = new Audio();
-    music.autoplay = false;
-    music.src = src;
-    music.play();
 }
 
 const render = canvas => {

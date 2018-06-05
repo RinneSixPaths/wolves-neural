@@ -1,7 +1,10 @@
+import * as synaptic from 'synaptic';
+import { getRandom, eatingSound } from '../services/worldService';
+
 const Network = synaptic.Network;
 const Layer = synaptic.Layer;
 
-class Wolf extends Network {
+export default class Wolf extends Network {
 	constructor(
 		name = 'Wolf', 
 		hunger = 1, 

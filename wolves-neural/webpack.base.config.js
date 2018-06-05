@@ -6,7 +6,7 @@ module.exports = function(production) {
 
         output: {
             filename: 'bundle.js',
-            path: path.resolve(__dirname, '/public')
+            path: path.resolve(__dirname, 'public')
         },
         
         module: {
@@ -18,7 +18,7 @@ module.exports = function(production) {
                       loader: 'babel-loader',
                       options: {
                         presets: ['@babel/preset-env'],
-                        //plugins: [require('@babel/plugin-proposal-object-rest-spread')]
+                        plugins: [require('@babel/plugin-proposal-object-rest-spread').default]
                       }
                     }
                   }

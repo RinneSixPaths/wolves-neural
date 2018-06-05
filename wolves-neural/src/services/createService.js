@@ -1,3 +1,7 @@
+import $ from '../libs/jquery-3.1.1.min';
+import Wolf from '../entities/wolf';
+import Victim from '../entities/victim';
+
 function createWolf() {
     const name = document.getElementById("wolf-name").value;
     if (!name) {

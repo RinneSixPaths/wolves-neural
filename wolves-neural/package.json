@@ -18,10 +18,17 @@
   },
   "homepage": "https://github.com/RinneSixPaths/wolves-neural#readme",
   "dependencies": {
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
+    "babel-loader": "^8.0.0-beta.3",
     "babel-preset-env": "^1.7.0",
+    "jquery": "^3.3.1",
+    "synaptic": "^1.1.4",
     "webpack": "^4.10.2"
+  },
+  "devDependencies": {
+    "webpack-command": "^0.2.0"
   }
 }
