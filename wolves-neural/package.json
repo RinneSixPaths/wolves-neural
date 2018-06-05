@@ -1,0 +1,27 @@
+{
+  "name": "wolves-neural",
+  "version": "1.0.0",
+  "description": "https://rinnesixpaths.github.io/wolves-neural/",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RinneSixPaths/wolves-neural.git"
+  },
+  "author": "RinneSixPaths",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RinneSixPaths/wolves-neural/issues"
+  },
+  "homepage": "https://github.com/RinneSixPaths/wolves-neural#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^4.10.2"
+  }
+}
