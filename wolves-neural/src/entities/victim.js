@@ -1,3 +1,5 @@
+import { getRandom } from '../services/worldService';
+
 const monsterIcons = [
   './img/monster1.png', 
   './img/monster2.png', 
@@ -7,7 +9,7 @@ const monsterIcons = [
   './img/monster6.png'
 ];
 
-class Victim {
+export default class Victim {
 	constructor(
         animal = 'monster',
         carnivores = .9, 
