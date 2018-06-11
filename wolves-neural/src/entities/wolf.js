@@ -1,5 +1,6 @@
 import * as synaptic from 'synaptic';
 import { getRandom, eatingSound } from '../services/worldService';
+import agrhh from '../../sounds/not.mp3';
 
 const Network = synaptic.Network;
 const Layer = synaptic.Layer;
@@ -66,7 +67,7 @@ export default class Wolf extends Network {
 			return;
 		}
 		if (this.starvation >= .5 && this.starvation < .6) {
-			eatingSound('./sounds/not.mp3');
+			eatingSound(agrhh);
 		}
 		this.starvation += 0.1;
 	}

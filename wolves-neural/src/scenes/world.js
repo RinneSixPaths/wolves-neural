@@ -3,6 +3,8 @@ import * as synaptic from  'synaptic';
 import Wolf from '../entities/wolf';
 import Victim from '../entities/victim';
 import { getRandom, eatingSound } from '../services/worldService';
+import eat from '../../sounds/eating.mp3';
+import death from '../../sounds/greetings.mp3';
 
 const imgs = [
     './img/pig.png', 
@@ -368,7 +370,7 @@ const checkCollision = (victim, wolf, index) => {
             console.log(`${wolf.name} would eat ${victim.animal}`);
             victims.splice(index, 1);
             resetAnimals();
-            eatingSound('./sounds/eating.mp3');
+            eatingSound(eat);
             wolf.resetStarvation();
             wolf.resetVelocity();
         } else {
@@ -464,7 +466,7 @@ const wolfDeath = wolf => {
     wolves.splice(wolfToRemove, 1);
     resetAnimals();
     clearTimeouts([wolf.hungerTimer, wolf.starveTimer]);
-    eatingSound('./sounds/greetings.mp3');
+    eatingSound(death);
     console.log(`${wolf.name} is dead`);
 }
 

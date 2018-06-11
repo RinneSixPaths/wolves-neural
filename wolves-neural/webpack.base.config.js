@@ -47,6 +47,18 @@ module.exports = function(production) {
                             }
                         }
                     ]
+                },
+                {
+                    test: /\.(gif|png|jpe?g|svg|mp3)$/i,
+                    exclude: /(node_modules|bower_components)/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                publicPath: 'public/'
+                            }
+                        }
+                    ]
                 }
             ]
         },
